@@ -1,0 +1,1 @@
+export const CONSUMER_SERVICE = 'CONSUMER';
