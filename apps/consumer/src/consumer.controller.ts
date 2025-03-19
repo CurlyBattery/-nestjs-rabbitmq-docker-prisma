@@ -1,12 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
+
 import { ConsumerService } from './consumer.service';
+import { CreateOrderDto } from './dto/create-order.dto';
 
 @Controller()
 export class ConsumerController {
-  constructor(private readonly appService: ConsumerService) {}
+  constructor(private readonly consumerService: ConsumerService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @EventPattern('placed-order')
+  placeOrder(@Payload() dto: CreateOrderDto) {
+    return this.consumerService.placeOrder(dto);
+  }
+
+  @MessagePattern()
+  getOrders() {
+    return this.consumerService.getOrders();
   }
 }
