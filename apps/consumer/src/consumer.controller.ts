@@ -13,7 +13,7 @@ export class ConsumerController {
     return this.consumerService.placeOrder(dto);
   }
 
-  @MessagePattern()
+  @MessagePattern({ cmd: 'fetch-orders' })
   getOrders() {
     return this.consumerService.getOrders();
   }

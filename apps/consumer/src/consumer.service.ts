@@ -13,6 +13,6 @@ export class ConsumerService {
   }
 
   getOrders() {
-    return this.prisma.order.find({});
+    return this.prisma.order.findMany();
   }
 }

@@ -3,6 +3,7 @@ FROM node:22-alpine AS development
 WORKDIR /usr/src/app
 
 COPY package*.json ./
+COPY /apps/consumer/prisma prisma
 
 RUN npm install --legacy-peer-deps
 
@@ -21,8 +22,9 @@ COPY package*.json ./
 
 RUN npm install --only=production --legacy-peer-deps
 
-COPY . .
+COPY --chown=node:node --from=development /usr/src/app/prisma /app/prisma
+COPY --chown=node:node --from=development /usr/src/app/src /app/src
 
-COPY --from=development /usr/src/spp/dist ./dist
+USER node
 
 CMD ["node", "dist/apps/consumer/main"]

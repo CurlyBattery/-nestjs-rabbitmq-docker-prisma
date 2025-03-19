@@ -16,6 +16,7 @@ import { CONSUMER_SERVICE } from './constants/services';
         RABBIT_MQ_CONSUMER_QUEUE: Joi.string().required(),
         PORT: Joi.number().required(),
       }),
+      envFilePath: './apps/producer/.env',
     }),
     RmqModule.register({
       name: CONSUMER_SERVICE,
