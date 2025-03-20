@@ -1,21 +1,11 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
 
 import { ProducerController } from './producer.controller';
 import { ProducerService } from './producer.service';
-import { RmqModule, RmqModuleOptions } from '@app/common';
+import { RmqModule } from '@app/common';
 import { CONSUMER_SERVICE, MAILER_SERVICE } from './constants/services';
-import { ClientsModule, Transport } from '@nestjs/microservices';
-
-const Names: RmqModuleOptions[] = [
-  {
-    name: CONSUMER_SERVICE,
-  },
-  {
-    name: MAILER_SERVICE,
-  },
-];
 
 @Module({
   imports: [
@@ -29,32 +19,12 @@ const Names: RmqModuleOptions[] = [
       }),
       envFilePath: './apps/producer/.env',
     }),
-    ClientsModule.registerAsync([
+    RmqModule.registerAsync([
       {
         name: CONSUMER_SERVICE,
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.get<string>('RABBIT_MQ_URI')],
-            queue: configService.get<string>(
-              `RABBIT_MQ_${CONSUMER_SERVICE}_QUEUE`,
-            ),
-          },
-        }),
-        inject: [ConfigService],
       },
       {
         name: MAILER_SERVICE,
-        useFactory: (configService: ConfigService) => ({
-          transport: Transport.RMQ,
-          options: {
-            urls: [configService.get<string>('RABBIT_MQ_URI')],
-            queue: configService.get<string>(
-              `RABBIT_MQ_${MAILER_SERVICE}_QUEUE`,
-            ),
-          },
-        }),
-        inject: [ConfigService],
       },
     ]),
   ],

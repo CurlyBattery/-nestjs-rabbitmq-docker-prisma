@@ -1,22 +1,21 @@
-import { ClientsModuleAsyncOptions, Transport } from '@nestjs/microservices';
 import { RmqModuleOptions } from '@app/common';
 import { ConfigService } from '@nestjs/config';
+import { ClientsModuleAsyncOptions, Transport } from '@nestjs/microservices';
 
-const options: ClientsModuleAsyncOptions = [];
-
-export const getOptions = async (names: RmqModuleOptions[]) => {
-  for (const name of names) {
-    options.push({
+export const rmqModuleAsyncOptions = (
+  names: RmqModuleOptions[],
+): ClientsModuleAsyncOptions => {
+  return names.map((name) => {
+    return {
       name: name.name,
       useFactory: (configService: ConfigService) => ({
         transport: Transport.RMQ,
         options: {
           urls: [configService.get<string>('RABBIT_MQ_URI')],
-          queue: configService.get<string>(`RABBIT_MQ_${name}_QUEUE`),
+          queue: configService.get<string>(`RABBIT_MQ_${name.name}_QUEUE`),
         },
       }),
       inject: [ConfigService],
-    });
-  }
-  return options;
+    };
+  });
 };
