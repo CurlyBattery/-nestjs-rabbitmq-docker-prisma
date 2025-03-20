@@ -41,6 +41,7 @@ services:
     depends_on:
       - postgres
       - consumer
+      - mailer
       - rabbitmq
     volumes:
       -  .:/usr/src/app
@@ -63,7 +64,8 @@ services:
     command: npm run start:dev mailer
     env_file:
       - ./apps/mailer/.env
-    # depends_on: - rabbitmq
+    depends_on:
+      - rabbitmq
     volumes:
       - .:/usr/src/app
       - node_modules:/app/node/modules

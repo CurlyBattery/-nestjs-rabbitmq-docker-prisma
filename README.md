@@ -1,8 +1,6 @@
 # Для запуска миграций: 
 > ``docker-compose -f ./docker-compose.migrate.yaml --env-file ./apps/consumer/.env up --abort-on-container-exit``
-
 ---
-
 # Когда нужно изменить бд:
 ## Если в бд есть данные ##
 1) в [docker-compose.migrate.yaml](docker-compose.migrate.yaml) меняем <br/>
