@@ -2,7 +2,8 @@
 > ``docker-compose -f ./docker-compose.migrate.yaml --env-file ./apps/consumer/.env up --abort-on-container-exit``
 
 ---
-# Когда нужно изменить бд
+
+# Когда нужно изменить бд:
 ## Если в бд есть данные ##
 1) в [docker-compose.migrate.yaml](docker-compose.migrate.yaml) меняем <br/>
 *```npx prisma migrate dev --name ${PRISMA_MIGRATION_NAME}```* <br/>
@@ -15,3 +16,6 @@
 
 ## Если режим разработки бд
 1)  Можно использовать ```npx prisma db push``` вместо ```npx prisma migrate dev --name ${PRISMA_MIGRATION_NAME}```
+---
+# Для запуска приложения:
+> ``docker-compose  --env-file ./apps/consumer/.env up``
