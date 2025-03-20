@@ -1,9 +1,10 @@
 import { DynamicModule, Module } from '@nestjs/common';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { ConfigService } from '@nestjs/config';
 import { RmqService } from './rmq.service';
+import { getOptions } from '@app/common/rmq/options';
+import { ConfigService } from '@nestjs/config';
 
-interface RmqModuleOptions {
+export interface RmqModuleOptions {
   name: string;
 }
 
@@ -30,6 +31,16 @@ export class RmqModule {
           },
         ]),
       ],
+      exports: [ClientsModule],
+    };
+  }
+
+  static async registerAsync(
+    names: RmqModuleOptions[],
+  ): Promise<DynamicModule> {
+    return {
+      module: RmqModule,
+      imports: [ClientsModule.registerAsync(await getOptions(names))],
       exports: [ClientsModule],
     };
   }

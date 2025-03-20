@@ -55,6 +55,19 @@ services:
       - '5672:5672'
     networks:
       - default-network
+  mailer:
+    build:
+      context: .
+      dockerfile: ./apps/mailer/Dockerfile
+      target: development
+    command: npm run start:dev mailer
+    env_file:
+      - ./apps/mailer/.env
+    volumes:
+      - .:/usr/src/app
+      - node_modules:/app/node/modules
+    networks:
+      - default-network
 
 volumes:
   db_data:
